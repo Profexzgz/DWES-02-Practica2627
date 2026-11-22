@@ -1,21 +1,26 @@
 <?php
 /**
  * EXTENSIÓN DE EJEMPLO - PROFESOR (Abel Carmona)
- * Archivo guía para el alumnado de 2º DAW - DWES
- * Cada alumno deberá crear su propio fichero: extensiones/ext_nombrealumno.inc.php
+ * Este archivo te sirve como plantilla guía para tu práctica de 2º DAW - DWES.
+ * 
+ * INSTRUCCIONES PARA TI:
+ * 1. Crea tu propio archivo dentro de esta carpeta: extensiones/ext_tunombre.inc.php
+ * 2. Renombra tus constantes, variables y funciones añadiendo tu nombre o iniciales
+ *    (por ejemplo: PROVEEDOR_JUAN, $catalogo_juan, renderizarCatalogoJuan...)
+ *    para que no colisionen con las de tus compañeros al hacer la Pull Request.
  */
 
-// 1. Constante identificativa del proveedor/alumno
+// 1. Define aquí una constante identificativa para tu proveedor/tienda
 define('PROVEEDOR_EJEMPLO', 'Dept. Informática - Prof. Abel');
 
-// 2. Registro de carga usando el array superglobal $GLOBALS
+// 2. Registra tu módulo en el array superglobal $GLOBALS
 $GLOBALS['extensiones_cargadas'][] = [
     'autor' => 'Abel Carmona (Ejemplo)',
     'proveedor' => PROVEEDOR_EJEMPLO,
     'fecha_actualizacion' => date('d/m/Y H:i')
 ];
 
-// 3. Array multidimensional asociativo con los productos del módulo
+// 3. Crea tu array multidimensional asociativo con al menos 4 productos propios
 $catalogo_ejemplo = [
     [
         'id' => 'EJ-01',
@@ -52,7 +57,8 @@ $catalogo_ejemplo = [
 ];
 
 /**
- * Calcula el precio final aplicando IVA y un descuento opcional.
+ * Función 1: Calcula el precio final aplicando la constante IVA y un descuento opcional.
+ * Debes implementarla usando parámetros con valor por defecto y return.
  */
 function calcularPrecioFinalEjemplo(float $precioBase, float $descuento = 0): float
 {
@@ -61,7 +67,7 @@ function calcularPrecioFinalEjemplo(float $precioBase, float $descuento = 0): fl
 }
 
 /**
- * Aplica una oferta flash modificando directamente el array por referencia (&).
+ * Función 2: Aplica una oferta flash modificando directamente tu array por referencia (&).
  */
 function aplicarOfertaFlashEjemplo(array &$producto, float $porcentaje): void
 {
@@ -71,7 +77,7 @@ function aplicarOfertaFlashEjemplo(array &$producto, float $porcentaje): void
 }
 
 /**
- * Filtra los productos por categoría usando bucle foreach.
+ * Función 3: Filtra tus productos por categoría recorriendo el array con foreach.
  */
 function filtrarProductosEjemplo(array $productos, string $categoriaFiltro): array
 {
@@ -89,20 +95,21 @@ function filtrarProductosEjemplo(array $productos, string $categoriaFiltro): arr
 }
 
 /**
- * Genera el HTML de las tarjetas de producto usando sintaxis HEREDOC y estructuras de control.
+ * Función 4: Genera el HTML de tus tarjetas de producto usando HEREDOC y estructuras de control.
  */
 function renderizarCatalogoEjemplo(array $productos): string
 {
+    // Accede aquí a las variables globales definidas en config.inc.php
     global $alerta_stock_bajo, $descuento_global;
     $html = '';
 
     foreach ($productos as $item) {
-        // Aplicamos oferta flash por referencia si está destacado
+        // Aplica la oferta flash por referencia si el producto está destacado
         aplicarOfertaFlashEjemplo($item, $descuento_global);
         $precioFinal = calcularPrecioFinalEjemplo($item['precio_base']);
         $precioFormateado = sprintf('%.2f %s', $precioFinal, MONEDA);
 
-        // Control de estado de stock con if / elseif / else
+        // Controla el estado del stock usando if / elseif / else
         if ($item['stock'] <= 0) {
             $badgeStock = '<span class="badge badge-agotado">Agotado</span>';
             $botonDisabled = 'disabled';
@@ -114,7 +121,7 @@ function renderizarCatalogoEjemplo(array $productos): string
             $botonDisabled = '';
         }
 
-        // Etiqueta de categoría con switch
+        // Asigna un icono según la categoría utilizando switch
         switch ($item['categoria']) {
             case 'Servidores':
                 $iconoCat = '🖥️';
@@ -133,8 +140,9 @@ function renderizarCatalogoEjemplo(array $productos): string
         $claseDestacado = $item['destacado'] ? 'card-destacada' : '';
         $etiquetaOferta = $item['destacado'] ? '<span class="tag-oferta">OFERTA FLASH -5%</span>' : '';
         $actionUrl = htmlspecialchars($_SERVER['PHP_SELF']);
+        $nombreProveedor = PROVEEDOR_EJEMPLO;
 
-        // Construcción limpia de HTML con HEREDOC
+        // Construye el bloque HTML con sintaxis HEREDOC
         $html .= <<<HTML
         <article class="card {$claseDestacado}">
             <div class="card-header">
@@ -142,7 +150,7 @@ function renderizarCatalogoEjemplo(array $productos): string
                 {$etiquetaOferta}
             </div>
             <h3>{$item['nombre']}</h3>
-            <p class="proveedor">Proveedor: <strong>{$GLOBALS['extensiones_cargadas'][0]['proveedor']}</strong></p>
+            <p class="proveedor">Proveedor: <strong>{$nombreProveedor}</strong></p>
             <div class="card-meta">
                 {$badgeStock}
                 <span class="precio">{$precioFormateado} <small>(IVA incl.)</small></span>
