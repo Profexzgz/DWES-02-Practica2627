@@ -170,6 +170,14 @@ foreach ($_SESSION['carrito'] as $item_carrito) {
     </section>
 
 </div>
-
+<details style="margin: 2rem; padding: 1rem; background: #1e293b; color: #f8fafc; border-radius: 8px; font-family: monospace;">
+    <summary style="cursor: pointer; font-weight: bold;">🛠️ Panel de Depuración en Vivo (Variables del Servidor)</summary>
+    <h4>1. Contenido de $_SESSION (Carrito e Historial):</h4>
+    <pre><?php var_dump($_SESSION); ?></pre>
+    <h4>2. Extensiones registradas en $GLOBALS:</h4>
+    <pre><?php print_r($GLOBALS['extensiones_cargadas']); ?></pre>
+    <h4>3. Datos recibidos por POST / GET:</h4>
+    <pre><?php var_dump(['GET' => $_GET, 'POST' => $_POST]); ?></pre>
+</details>
 </body>
 </html>
